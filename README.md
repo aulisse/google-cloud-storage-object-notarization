@@ -8,5 +8,5 @@ The purpose of this project is to provide a Google Cloud Storage user with a sys
 - [gcloud](https://cloud.google.com/sdk/downloads). Alternatevely, you can use the [Cloud Shell](https://cloud.google.com/shell/docs/starting-cloud-shell)
 
 # Useful links
-- [Google Cloud Storage Metadata Editing] (https://cloud.google.com/storage/docs/viewing-editing-metadata)
-- [Cloud Functions Local Emulator] (https://cloud.google.com/functions/docs/emulator)
+- [Google Cloud Storage Metadata Editing](https://cloud.google.com/storage/docs/viewing-editing-metadata)
+- [Cloud Functions Local Emulator](https://cloud.google.com/functions/docs/emulator)
