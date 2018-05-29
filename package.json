@@ -1,6 +1,7 @@
 {
-  "dependencies": {
-    "uuid": "^3.0.1",
-    "javascript-opentimestamps": "^0.2"
-  }
+    "dependencies": {
+        "uuid": "^3.0.1",
+        "javascript-opentimestamps": "^0.2",
+        "@google-cloud/storage": "^1.7.0"
+    }
 }
