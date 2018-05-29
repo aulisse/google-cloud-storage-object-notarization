@@ -12,3 +12,4 @@ The purpose of this project is to provide a Google Cloud Storage user with a sys
 - [Cloud Functions Local Emulator](https://cloud.google.com/functions/docs/emulator)
 - [GCS-GCF integration examples](https://cloud.google.com/functions/docs/tutorials/storage)
 - [Cloud Storage NodeJS client Library](https://cloud.google.com/storage/docs/reference/libraries#client-libraries-install-nodejs)
+- [API for metadata update](https://cloud.google.com/storage/docs/json_api/v1/objects/update)
