@@ -14,6 +14,7 @@ The purpose of this project is to provide a Google Cloud Storage user with a sys
 - run deploy.sh
 
 # Useful links
+- [OpenTimestamps API](https://opentimestamps.org/)
 - [Google Cloud Storage Metadata Editing](https://cloud.google.com/storage/docs/viewing-editing-metadata)
 - [Cloud Functions Local Emulator](https://cloud.google.com/functions/docs/emulator)
 - [GCS-GCF integration examples](https://cloud.google.com/functions/docs/tutorials/storage)
