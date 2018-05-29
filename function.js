@@ -23,8 +23,8 @@ exports.objectNotarization = (event, callback) => {
 
     console.log(`Starting notarization...`);
 
-    const hash = Buffer.from(f.md5Hash);
-    const detached = OpenTimestamps.DetachedTimestampFile.fromHash(new OpenTimestamps.Ops.OpSHA256(), [hash]);
+    const hash = Buffer.from(f.md5Hash, "hex");
+    const detached = OpenTimestamps.DetachedTimestampFile.fromBytes(new OpenTimestamps.Ops.OpSHA256(), hash);
     OpenTimestamps.stamp(detached).then(() => {
         console.log(`done`);
         console.log(detached);
