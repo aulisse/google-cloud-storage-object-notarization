@@ -15,8 +15,8 @@ The purpose of this project is to provide a Google Cloud Storage user with a sys
 
 # Useful links
 - [OpenTimestamps API](https://opentimestamps.org/)
+- [Google Cloud Storage - Google Cloud Functions integration examples](https://cloud.google.com/functions/docs/tutorials/storage)
+- [Google Cloud Functions Local Emulator](https://cloud.google.com/functions/docs/emulator)
+- [Google Cloud Storage NodeJS client Library](https://cloud.google.com/storage/docs/reference/libraries#client-libraries-install-nodejs)
 - [Google Cloud Storage Metadata Editing](https://cloud.google.com/storage/docs/viewing-editing-metadata)
-- [Cloud Functions Local Emulator](https://cloud.google.com/functions/docs/emulator)
-- [GCS-GCF integration examples](https://cloud.google.com/functions/docs/tutorials/storage)
-- [Cloud Storage NodeJS client Library](https://cloud.google.com/storage/docs/reference/libraries#client-libraries-install-nodejs)
 - [API for metadata update](https://cloud.google.com/storage/docs/json_api/v1/objects/update) and [NodeJS client method](https://cloud.google.com/nodejs/docs/reference/storage/1.6.x/File#setMetadata)
