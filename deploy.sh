@@ -1,1 +1,2 @@
-gcloud beta functions deploy objectNotarization --trigger-resource bcn  --trigger-event google.storage.object.finalize
+GCS_BUCKET=bcn
+gcloud beta functions deploy objectNotarization --trigger-resource $GCS_BUCKET --trigger-event google.storage.object.finalize
