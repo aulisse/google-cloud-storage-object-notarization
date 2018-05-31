@@ -36,6 +36,7 @@ exports.objectNotarization = (event, callback) => {
                 .setMetadata({metadata: {ots: infoResult}})
                 .then(() => {
                     console.log(`OTS written in metadata`);
+                    //push metadata in pubsub, ack deadline 10 minutes
                     callback();
                 })
                 .catch(err => {
@@ -43,4 +44,13 @@ exports.objectNotarization = (event, callback) => {
                 });
 
     });
+};
+
+//triggered but a new message received in pubsub, "google.pubsub.topic.publish"
+exports.verifyNotarization = (event, callback) => {
+    // if #num_attempt > max_num_attent log the error and return
+    // if (now() - pubsub message timestamp < 10 minutes) do nothing (pubsub will redeliver message when the ack deadline expires
+    // extract body of the pubsub message and call OpenTimestamps api in order to verify
+    // if verification is OK, write confirmation in GCS object metadata and ack pubsub message
+    // if verification is KO, increment #num_attempt and push message in pubsub
 };
