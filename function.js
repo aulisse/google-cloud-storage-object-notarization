@@ -46,7 +46,7 @@ exports.objectNotarization = (event, callback) => {
     });
 };
 
-//triggered but a new message received in pubsub, "google.pubsub.topic.publish"
+//triggered by a new message received in pubsub, event "google.pubsub.topic.publish"
 exports.verifyNotarization = (event, callback) => {
     // if #num_attempt > max_num_attempt then log the error, set "failed" in object metadata and return
     // if (now() - pubsub message timestamp < 10 minutes) do nothing (pubsub will redeliver message when the ack deadline expires, that is after 10 minutes) and return
