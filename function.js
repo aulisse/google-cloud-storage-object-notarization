@@ -2,48 +2,49 @@
 
 const OpenTimestamps = require('javascript-opentimestamps');
 const Storage = require('@google-cloud/storage');
+const crypto = require('crypto');
 const storage = new Storage();
 
 exports.objectNotarization = (event, callback) => {
-    const f = event.data;
-    const context = event.context;
+  const hasher = crypto.createHash('sha256');
+  const f = event.data;
+  const stream = storage.bucket(f.bucket).file(f.name).createReadStream();
 
-    //print current metadata info
-    storage
-            .bucket(f.bucket)
-            .file(f.name)
-            .getMetadata()
-            .then((data) => {
-                console.log(data);
-            })
-            .catch(err => {
-                console.error('ERROR:', err);
-            });
-
-    console.log(`Starting notarization...`);
-    const hash = Buffer.from(f.md5Hash, "hex");
-    const detached = OpenTimestamps.DetachedTimestampFile.fromBytes(new OpenTimestamps.Ops.OpSHA256(), hash);
-    OpenTimestamps.stamp(detached).then(() => {
-        console.log(detached);
-        const infoResult = OpenTimestamps.info(detached);
-        console.log(infoResult);
+  stream
+    .on('data', function(chunk) {
+      console.log(`Received ${chunk.length} bytes of data.`);
+      hasher.update(chunk);
+    })
+    .on('end', function() {
+      console.log("end!");
+      const hash = hasher.digest();
+      const hash_hex = hash.toString('hex');
+      console.log(`hash is ${hash_hex}`);
+      var hash_array = [hash.length];   //ask Luca
+      for (var i = 0; i < hash.length; ++i) {
+        hash_array[i] = hash[i];
+      }
+      const detached = OpenTimestamps.DetachedTimestampFile.fromHash(new OpenTimestamps.Ops.OpSHA256(), hash_array);
+      OpenTimestamps.stamp(detached).then(() => {
         console.log(`Notarization completed`);
-        const b64 = Buffer.from(detached.serializeToBytes()).toString('base64');
+
+        const ots_base64 = Buffer.from(detached.serializeToBytes()).toString('base64');
 
         console.log(`Writing OTS to object metadata...`);
         storage
-                .bucket(f.bucket)
-                .file(f.name)
-                .setMetadata({metadata: {ots: b64}})
-                .then(() => {
-                    console.log(`OTS written in metadata`);
-                    //push metadata in pubsub, specifying #num_attempt=0
-                    callback();
-                })
-                .catch(err => {
-                    console.error('ERROR:', err);
-                });
+          .bucket(f.bucket)
+          .file(f.name)
+          .setMetadata({metadata: {ots: ots_base64, sha256: hash_hex}})
+          .then(() => {
+            console.log(`OTS written in metadata`);
+            //push metadata in pubsub, specifying #num_attempt=0
+            callback();
+          })
+          .catch(err => {
+            console.error('ERROR:', err);
+          });
 
+      });
     });
 };
 
