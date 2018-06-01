@@ -28,12 +28,13 @@ exports.objectNotarization = (event, callback) => {
         const infoResult = OpenTimestamps.info(detached);
         console.log(infoResult);
         console.log(`Notarization completed`);
+        const b64 = Buffer.from(detached.serializeToBytes()).toString('base64');
 
         console.log(`Writing OTS to object metadata...`);
         storage
                 .bucket(f.bucket)
                 .file(f.name)
-                .setMetadata({metadata: {ots: infoResult}})
+                .setMetadata({metadata: {ots: b64}})
                 .then(() => {
                     console.log(`OTS written in metadata`);
                     //push metadata in pubsub, specifying #num_attempt=0
