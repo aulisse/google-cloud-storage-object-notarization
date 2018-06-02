@@ -54,7 +54,8 @@ exports.verifyNotarization = (event, callback) => {
 
     //check if ots metadata are eligible for verification attempt
 
-    console.log("Reading a file uploaded 24 hours ago...");
+    const f = event.data;
+    console.log(`Receiving a file uploaded 24 hours ago: ${f.name}`);
     
     callback();
 };
