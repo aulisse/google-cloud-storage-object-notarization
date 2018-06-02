@@ -52,7 +52,7 @@ exports.objectNotarization = (event, callback) => {
 //This function will be called even when the OTS will be written on file upload, such case should be checked
 exports.verifyNotarization = (event, callback) => {
 
-    //check file is nearline class. If not, return because it means that the file was just uploaded
+    //check if ots metadata are eligible for verification attempt
 
     console.log("Reading a file uploaded 24 hours ago...");
     
