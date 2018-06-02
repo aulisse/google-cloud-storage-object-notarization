@@ -37,7 +37,6 @@ exports.objectNotarization = (event, callback) => {
           .setMetadata({metadata: {ots: ots_base64, sha256: hash_hex}})
           .then(() => {
             console.log(`OTS written in metadata`);
-            //push metadata in pubsub, specifying #num_attempt=0
             callback();
           })
           .catch(err => {
@@ -48,11 +47,14 @@ exports.objectNotarization = (event, callback) => {
     });
 };
 
-//triggered by a new message received in pubsub, event "google.pubsub.topic.publish"
+//This function will be called when a metadata of the object changes
+//After 24 hours from upload the object will be set from Regional to Nearline, metadata will change and verification can be done
+//This function will be called even when the OTS will be written on file upload, such case should be checked
 exports.verifyNotarization = (event, callback) => {
-    // if #num_attempt > max_num_attempt then log the error, set "failed" in object metadata and return
-    // if (now() - pubsub message timestamp < 10 minutes) do nothing (pubsub will redeliver message when the ack deadline expires, that is after 10 minutes) and return
-    // extract body of the pubsub message and call OpenTimestamps api in order to verify
-    // if verification is OK, write confirmation in GCS object metadata, ack pubsub message and return
-    // if verification is KO, increment #num_attempt, push message in pubsub and return
+
+    //check file is nearline class. If not, return because it means that the file was just uploaded
+
+    console.log("Reading a file uploaded 24 hours ago...");
+    
+    callback();
 };
