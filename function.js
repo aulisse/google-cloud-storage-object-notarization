@@ -41,6 +41,7 @@ exports.objectNotarization = (event, callback) => {
           })
           .catch(err => {
             console.error('ERROR:', err);
+            callback();
           });
 
       });
@@ -90,5 +91,6 @@ exports.upgradeNotarization = (event, callback) => {
 		})
 		.catch(err => {
 			console.error('ERROR:', err);
+			callback();
 		});
 };
