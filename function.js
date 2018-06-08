@@ -69,9 +69,12 @@ exports.upgradeNotarization = (event, callback) => {
 		.then((results) => {
 			const metadata = results[0].metadata;
 			const ots_base64 = metadata.ots;
-      console.log(`got metadata ots is ${ots_base64}`);
+      		console.log(`got metadata ots is ${ots_base64}`);
 			const ots = Buffer.from(ots_base64, 'base64');
 			detachedOts = OpenTimestamps.DetachedTimestampFile.deserialize(ots);
+			if (detachedOts.timestamp.isTimestampComplete ()){
+				throw new Error('Timestamp just completed');
+			}
 			return OpenTimestamps.upgrade(detachedOts);
 		})
 		.then((changed) => {
