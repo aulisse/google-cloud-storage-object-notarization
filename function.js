@@ -50,7 +50,7 @@ exports.objectNotarization = (event, callback) => {
 //This function will be called when a metadata of the object changes
 //After 24 hours from upload the object will be set from Regional to Nearline, metadata will change and verification can be done
 //This function will be called even when the OTS will be written on file upload, such case should be checked
-exports.verifyNotarization = (event, callback) => {
+exports.upgradeNotarization = (event, callback) => {
 
 	//check if ots metadata are eligible for verification attempt
 	//not eligible: callback()
