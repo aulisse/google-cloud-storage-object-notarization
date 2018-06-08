@@ -52,12 +52,42 @@ exports.objectNotarization = (event, callback) => {
 //This function will be called even when the OTS will be written on file upload, such case should be checked
 exports.verifyNotarization = (event, callback) => {
 
-    //check if ots metadata are eligible for verification attempt
-    //not eligible: callback()
-    //eligible: verify and update object metadata
+	//check if ots metadata are eligible for verification attempt
+	//not eligible: callback()
+	//eligible: verify and update object metadata
 
-    const f = event.data;
-    console.log(`Receiving a file uploaded 24 hours ago: ${f.name}`);
-    
-    callback();
+	const f = event.data;
+	console.log(`Receiving a file uploaded 24 hours ago: ${f.name}`);
+
+	// Read file metadata: ots, sha256
+	var detachedOts = {};
+	storage
+		.bucket(f.bucket)
+		.file(f.name)
+		.getMetadata()
+		.then((results) => {
+			const metadata = results[0];
+			const ots_base64 = metadata.ots;
+			const ots = Buffer.from(ots_base64, 'base64');
+			detachedOts = OpenTimestamps.DetachedTimestampFile.deserialize(ots);
+			return OpenTimestamps.upgrade(detachedOts);
+		})
+		.then((changed) => {
+			if(!changed){
+				throw new Error('Timestamp not upgraded');
+			}
+			console.log('Timestamp upgraded');
+			const ots_base64 = Buffer.from(detachedOts.serializeToBytes()).toString('base64');
+			return storage
+				.bucket(f.bucket)
+				.file(f.name)
+				.setMetadata({metadata: {ots: ots_base64}});
+		})
+		.then(() => {
+			console.log(`OTS written in metadata`);
+			callback();
+		})
+		.catch(err => {
+			console.error('ERROR:', err);
+		});
 };
