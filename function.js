@@ -12,7 +12,7 @@ exports.objectNotarization = (event, callback) => {
 
   stream
     .on('data', function(chunk) {
-      console.log(`Received ${chunk.length} bytes of data.`);
+      //console.log(`Received ${chunk.length} bytes of data.`);
       hasher.update(chunk);
     })
     .on('end', function() {
@@ -47,6 +47,7 @@ exports.objectNotarization = (event, callback) => {
     });
 };
 
+
 //This function will be called when a metadata of the object changes
 //After 24 hours from upload the object will be set from Regional to Nearline, metadata will change and verification can be done
 //This function will be called even when the OTS will be written on file upload, such case should be checked
@@ -55,7 +56,6 @@ exports.upgradeNotarization = (event, callback) => {
 	//check if ots metadata are eligible for verification attempt
 	//not eligible: callback()
 	//eligible: verify and update object metadata
-
 	const f = event.data;
 	console.log(`Receiving a file uploaded 24 hours ago: ${f.name}`);
 
@@ -66,8 +66,9 @@ exports.upgradeNotarization = (event, callback) => {
 		.file(f.name)
 		.getMetadata()
 		.then((results) => {
-			const metadata = results[0];
+			const metadata = results[0].metadata;
 			const ots_base64 = metadata.ots;
+      console.log(`got metadata ots is ${ots_base64}`);
 			const ots = Buffer.from(ots_base64, 'base64');
 			detachedOts = OpenTimestamps.DetachedTimestampFile.deserialize(ots);
 			return OpenTimestamps.upgrade(detachedOts);
