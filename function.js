@@ -93,7 +93,13 @@ exports.upgradeNotarization = (event, callback) => {
 			callback();
 		})
 		.catch(err => {
-			console.error('ERROR:', err);
-			callback();
+			if (err.message === 'Timestamp just completed'){
+				callback(null, err.message);
+			} else if (err.message === 'Timestamp not upgraded'){
+				callback(null, err.message);
+			} else {
+				console.error('ERROR:', err);
+				callback(1);
+			}
 		});
 };
