@@ -33,3 +33,4 @@ Of course the notarization process is as reliable as the used blockchain, with t
 - [Google Cloud Storage NodeJS client Library](https://cloud.google.com/storage/docs/reference/libraries#client-libraries-install-nodejs)
 - [Google Cloud Storage Metadata Editing](https://cloud.google.com/storage/docs/viewing-editing-metadata)
 - [API for metadata update](https://cloud.google.com/storage/docs/json_api/v1/objects/update) and [NodeJS client method](https://cloud.google.com/nodejs/docs/reference/storage/1.6.x/File#setMetadata)
+- [Background Functions Callback Parameter](https://cloud.google.com/functions/docs/writing/background#callback_parameter)
