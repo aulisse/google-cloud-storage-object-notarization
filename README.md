@@ -1,4 +1,4 @@
-# google-cloud-storage-object-notarization
+# Google Cloud Storage Object Notarization
 
 The purpose of this project is to provide a Google Cloud Storage user with a system that allows to notarize every object uploaded in a specific bucket.
 
@@ -21,7 +21,7 @@ Of course the notarization process is as reliable as the used blockchain, with t
 
 # How does it work
 - upload a file on GCS
-- the Google Cloud Function (GCF) _objectNotarization_ is triggered by 'new object on GCS'
+- the Google Cloud Function (GCF) _objectNotarization_ is triggered by 'new object on GCS' event
 - the GCF _objectNotarization_ invokes the file notarization using OpenTimestamps API
 - the GCF _objectNotarization_ receives a callback with the temporary notarization receipt, which is then written in the GCS object metadata. This receipt is temporary as the notarization does not happen instantly: the OpeTimestamps calendars will eventually finilize notarization when an actual bitcoin transaction including the Merkle root of all submitted documents will be included in the bitcoin blockchain  
 - the GCF _upgradeNotarization_ is called when a metadata of the file object changes, e.g. after 24 hours from upload the object will be set from Regional to Nearline. This is exploited to upgrade the receipt to its final status
