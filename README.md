@@ -1,12 +1,12 @@
 # Google Cloud Storage Object Notarization
 
-The purpose of this project is to provide a Google Cloud Storage user with a system that allows to notarize every object uploaded in a specific bucket.
+The purpose of this project is to provide a Google Cloud Storage user with a system that allows to notarize _every_ object uploaded in a specific bucket.
 
 Notarization (also known as timestamping) is a powerful non-monetary blockchain application, consisting of trustless timestamping of documents or anchoring of arbitrarily large data sets.
 
-A generic data file can be hashed to produce a short unique identifier, equivalent to its digital fingerprint. Such a fingerprint can be associated to a Bitcoin transaction (or any other kind of blockchain transaction), the bitcoin amount being irrelevant, and hence registered on the blockchain. The immutability of this hash commitment on the blockchain provides the data file owner with a robust means of non-repudiable timestamping and the ability to exhibit the file at a later time and prove without a doubt that its contents have not changed i.e. by comparing the hash of the exhibited file to the hash notarized on the blockchain. 
+A generic data file can be hashed to produce a short unique identifier, equivalent to its digital fingerprint. Such a fingerprint can be associated to a Bitcoin transaction (or any other kind of blockchain transaction), the bitcoin amount being irrelevant, and hence registered on the blockchain. The immutability of this hash commitment on the blockchain provides the data file owner with a robust means of non-repudiable timestamping and the ability to exhibit the file at a later time and prove without a doubt that its content has not changed i.e. by comparing the hash of the exhibited file to the hash notarized on the blockchain. 
 
-Of course the notarization process is as reliable as the used blockchain, with the bitcoin one being the most secure. There generic notarization process has been standardized as [OpenTimestamps](https://opentimestamps.org/) to achieve third party auditable verification.
+Of course the notarization process is as reliable as the used blockchain, with the bitcoin one being the most secure. The generic notarization process has been standardized as [OpenTimestamps](https://opentimestamps.org/) to achieve third party auditable verification.
 
 # Requirements:
 - [a Google Cloud Platform (GCP) account](https://cloud.google.com/free/)
@@ -23,8 +23,8 @@ Of course the notarization process is as reliable as the used blockchain, with t
 - upload a file on GCS
 - the Google Cloud Function (GCF) _objectNotarization_ is triggered by 'new object on GCS' event
 - the GCF _objectNotarization_ invokes the file notarization using OpenTimestamps API
-- the GCF _objectNotarization_ receives a callback with the temporary notarization receipt, which is then written in the GCS object metadata. This receipt is temporary as the notarization does not happen instantly: the OpeTimestamps calendars will eventually finilize notarization when an actual bitcoin transaction including the Merkle root of all submitted documents will be included in the bitcoin blockchain  
-- the GCF _upgradeNotarization_ is called when a metadata of the file object changes, e.g. after 24 hours from upload the object will be set from Regional to Nearline. This is exploited to upgrade the receipt to its final status
+- the GCF _objectNotarization_ receives a callback with the temporary notarization receipt, which is then written in the GCS object metadata. This receipt is temporary as the notarization does not happen instantly: the OpenTimestamps calendars will eventually finalize notarization when an actual bitcoin transaction including the Merkle root of all submitted documents will be included in the bitcoin blockchain  
+- the GCF _upgradeNotarization_ is called when a metadata of the file object changes, e.g. after 24 hours from upload the object will be set from Regional to Nearline. This is used to upgrade the receipt to its final status
 
 # Useful links
 - [OpenTimestamps API](https://opentimestamps.org/)
