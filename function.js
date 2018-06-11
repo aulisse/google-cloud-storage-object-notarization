@@ -5,6 +5,13 @@ const Storage = require('@google-cloud/storage');
 const crypto = require('crypto');
 const storage = new Storage();
 
+const MESSAGE_COMPLETED = 'Timestamp just completed';
+const MESSAGE_NOT_UPGRADED = 'Timestamp not upgraded';
+
+const STATUS_UPGRADE_NEEDED = 'UPGRADE_NEEDED';
+const STATUS_COMPLETED = 'COMPLETED';
+const STATUS_FAILED = 'FAILED';
+
 exports.objectNotarization = (event, callback) => {
   const hasher = crypto.createHash('sha256');
   const f = event.data;
@@ -16,10 +23,10 @@ exports.objectNotarization = (event, callback) => {
       hasher.update(chunk);
     })
     .on('end', function() {
-      console.log("end!");
+      //console.log("end!");
       const hash = hasher.digest();
       const hash_hex = hash.toString('hex');
-      console.log(`hash is ${hash_hex}`);
+      console.log(`sha256 is ${hash_hex}`);
       var hash_array = [hash.length];   //ask Luca
       for (var i = 0; i < hash.length; ++i) {
         hash_array[i] = hash[i];
@@ -34,7 +41,7 @@ exports.objectNotarization = (event, callback) => {
         storage
           .bucket(f.bucket)
           .file(f.name)
-          .setMetadata({metadata: {ots: ots_base64, sha256: hash_hex}})
+          .setMetadata({metadata: {ots: ots_base64, sha256: hash_hex, status: STATUS_UPGRADE_NEEDED}})
           .then(() => {
             console.log(`OTS written in metadata`);
             callback();
@@ -54,48 +61,47 @@ exports.objectNotarization = (event, callback) => {
 //This function will be called even when the OTS will be written on file upload, such case should be checked
 exports.upgradeNotarization = (event, callback) => {
 
-	//check if ots metadata are eligible for verification attempt
-	//not eligible: callback()
-	//eligible: verify and update object metadata
 	const f = event.data;
-	console.log(`Receiving a file uploaded 24 hours ago: ${f.name}`);
+	console.log(`Detected a metadata modification in file: ${f.name}, access object metadata to check eligibility for upgrade`);
 
-	// Read file metadata: ots, sha256
 	var detachedOts = {};
-	storage
+        storage
 		.bucket(f.bucket)
 		.file(f.name)
 		.getMetadata()
 		.then((results) => {
+                        console.log("Reading object metadata...");
 			const metadata = results[0].metadata;
 			const ots_base64 = metadata.ots;
-      		console.log(`got metadata ots is ${ots_base64}`);
+                        //console.log(`got metadata ots is ${ots_base64}`);
 			const ots = Buffer.from(ots_base64, 'base64');
 			detachedOts = OpenTimestamps.DetachedTimestampFile.deserialize(ots);
 			if (detachedOts.timestamp.isTimestampComplete ()){
-				throw new Error('Timestamp just completed');
+                                console.log("Timestamp completed, no need to upgrade");
+				throw new Error(MESSAGE_COMPLETED);
 			}
 			return OpenTimestamps.upgrade(detachedOts);
 		})
 		.then((changed) => {
 			if(!changed){
-				throw new Error('Timestamp not upgraded');
+                                console.log("Timestamp not eligible for upgrade");
+				throw new Error(MESSAGE_NOT_UPGRADED);
 			}
-			console.log('Timestamp upgraded');
+			console.log('Timestamp upgraded, writing upgraded ots in object metadata');
 			const ots_base64 = Buffer.from(detachedOts.serializeToBytes()).toString('base64');
 			return storage
 				.bucket(f.bucket)
 				.file(f.name)
-				.setMetadata({metadata: {ots: ots_base64}});
+				.setMetadata({metadata: {ots: ots_base64, status: STATUS_COMPLETED}});
 		})
 		.then(() => {
 			console.log(`OTS written in metadata`);
 			callback();
 		})
 		.catch(err => {
-			if (err.message === 'Timestamp just completed'){
+			if (err.message === MESSAGE_COMPLETED){
 				callback(null, err.message);
-			} else if (err.message === 'Timestamp not upgraded'){
+			} else if (err.message === MESSAGE_NOT_UPGRADED){
 				callback(null, err.message);
 			} else {
 				console.error('ERROR:', err);
