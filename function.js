@@ -5,7 +5,7 @@ const Storage = require('@google-cloud/storage');
 const crypto = require('crypto');
 const storage = new Storage();
 
-const MESSAGE_COMPLETED = 'Timestamp just completed';
+const MESSAGE_COMPLETED = 'Timestamp already completed';
 const MESSAGE_NOT_UPGRADED = 'Timestamp not upgraded';
 
 const STATUS_UPGRADE_NEEDED = 'UPGRADE_NEEDED';
