@@ -10,7 +10,7 @@ Of course the notarization process is as reliable as the used blockchain, with t
 
 # Disclaimer
 
-This is not an official Google API. We are not responsible of any damage that could be done with it. Use it at your own risk.
+This is not an official Google application. We are not responsible of any damage that could be done with it. Use it at your own risk.
 
 # License
 
