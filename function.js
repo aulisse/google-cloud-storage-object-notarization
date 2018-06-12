@@ -12,6 +12,8 @@ const STATUS_UPGRADE_NEEDED = 'UPGRADE_NEEDED';
 const STATUS_COMPLETED = 'COMPLETED';
 const STATUS_FAILED = 'FAILED';
 
+//this function will be called when a new object is uploaded in the GCS bucket
+//it computes sha256 and then starts the notarization process
 exports.objectNotarization = (event, callback) => {
   const hasher = crypto.createHash('sha256');
   const f = event.data;
