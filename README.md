@@ -1,4 +1,4 @@
-# Google Cloud Storage Object Notarization
+# Google Cloud Storage Object Notarization (Unofficial)
 
 The purpose of this project is to provide a Google Cloud Storage user with a system that allows to notarize _every_ object uploaded in a specific bucket.
 
