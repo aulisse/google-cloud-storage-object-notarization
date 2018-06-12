@@ -8,6 +8,10 @@ A generic data file can be hashed to produce a short unique identifier, equivale
 
 Of course the notarization process is as reliable as the used blockchain, with the bitcoin one being the most secure. The generic notarization process has been standardized as [OpenTimestamps](https://opentimestamps.org/) to achieve third party auditable verification.
 
+# Disclaimer
+
+This is not an official Google API. We are not responsible of any damage that could be done with it. Use it at your own risk.
+
 # License
 
 Licensed under the Apache License, Version 2.0 (the "License");
