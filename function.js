@@ -28,12 +28,7 @@ exports.objectNotarization = (event, callback) => {
       //console.log("end!");
       const hash = hasher.digest();
       const hash_hex = hash.toString('hex');
-      console.log(`sha256 is ${hash_hex}`);
-      var hash_array = [hash.length];   //ask Luca
-      for (var i = 0; i < hash.length; ++i) {
-        hash_array[i] = hash[i];
-      }
-      const detached = OpenTimestamps.DetachedTimestampFile.fromHash(new OpenTimestamps.Ops.OpSHA256(), hash_array);
+      const detached = OpenTimestamps.DetachedTimestampFile.fromHash(new OpenTimestamps.Ops.OpSHA256(), hash);
       OpenTimestamps.stamp(detached).then(() => {
         console.log(`Notarization completed`);
 
